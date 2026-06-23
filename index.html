@@ -3,578 +3,1393 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diego Garcia | Backend Developer</title>
-<meta name="description" content="Landing page de Diego Garcia com foco em projetos reais de ERP, APIs de pagamento e SaaS de assinaturas com Laravel.">
+<title>Diego Garcia · Back-end Developer</title>
+<meta name="description" content="Desenvolvedor Back-end focado em PHP/Laravel, APIs REST, integrações de sistemas, bancos de dados relacionais e automação aplicada com IA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
+/* ── Tokens ── */
 :root {
-  --bg: #0b1220;
-  --surface: #111a2d;
-  --surface-strong: #17243d;
-  --text: #e9efff;
-  --text-soft: #98a6c7;
-  --line: #263556;
-  --accent: #34d399;
-  --accent-2: #38bdf8;
-  --shadow: 0 18px 50px rgba(4, 10, 22, 0.36);
+  --bg:          #080e1a;
+  --surface:     #0d1525;
+  --surface-hi:  #121e33;
+  --border:      #1c2d4a;
+  --border-hi:   #2a4268;
+  --text:        #dde8ff;
+  --text-mid:    #7d95c4;
+  --text-dim:    #465b82;
+  --green:       #22d07a;
+  --green-dim:   rgba(34,208,122,.12);
+  --blue:        #38bdf8;
+  --blue-dim:    rgba(56,189,248,.10);
+  --radius:      14px;
+  --radius-sm:   8px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
 
 body {
-  font-family: Sora, sans-serif;
-  background:
-    radial-gradient(1200px 600px at 80% -20%, rgba(56, 189, 248, 0.18), transparent 60%),
-    radial-gradient(900px 500px at 5% 10%, rgba(52, 211, 153, 0.14), transparent 60%),
-    var(--bg);
+  font-family: Inter, sans-serif;
+  background: var(--bg);
   color: var(--text);
-  line-height: 1.65;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* subtle ambient glow */
+  background-image:
+    radial-gradient(ellipse 900px 500px at 75% -10%, rgba(56,189,248,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 700px 400px at 10% 20%,  rgba(34,208,122,.05) 0%, transparent 65%);
 }
 
-a { color: inherit; }
+a { color:inherit; text-decoration:none; }
+img { display:block; }
+ul { list-style:none; }
 
-.container {
-  width: min(1140px, 92%);
-  margin: 0 auto;
+/* ── Layout ── */
+.wrap { width: min(1100px, 92%); margin-inline: auto; }
+
+/* ── Navbar ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(8,14,26,.82);
+  border-bottom: 1px solid var(--border);
 }
 
-.hero {
-  position: relative;
-  padding: 36px 0 52px;
-  overflow: hidden;
-}
-
-.topbar {
+.navbar-inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 44px;
+  justify-content: space-between;
+  gap: 20px;
+  height: 56px;
 }
 
-.brand {
+.logo {
   font-family: "JetBrains Mono", monospace;
-  color: var(--text-soft);
   font-size: 13px;
+  color: var(--text-mid);
+  letter-spacing: .3px;
 }
+.logo span { color: var(--green); }
 
-.status {
-  font-size: 12px;
-  color: #072516;
-  background: rgba(52, 211, 153, 0.96);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-weight: 700;
-}
-
-.nav {
+.nav-links {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.nav a {
-  text-decoration: none;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: #9ec8f7;
+.nav-links a {
+  font-size: 13px;
+  color: var(--text-mid);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--text); background: var(--surface-hi); }
+
+.badge-open {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  color: #052d18;
+  background: var(--green);
+  padding: 5px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 72px;
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.35fr 0.85fr;
-  gap: 28px;
-  align-items: stretch;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: start;
 }
 
-.eyebrow {
-  display: inline-block;
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: "JetBrains Mono", monospace;
-  font-size: 13px;
-  color: var(--accent-2);
-  margin-bottom: 14px;
-  letter-spacing: 0.4px;
+  font-size: 12px;
+  color: var(--blue);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--blue);
+  opacity: .6;
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 4.2vw, 4rem);
-  line-height: 1.08;
-  margin-bottom: 14px;
-  max-width: 16ch;
+  font-family: Sora, sans-serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  margin-bottom: 22px;
+  max-width: 18ch;
 }
 
-.hero p {
-  color: var(--text-soft);
-  font-size: clamp(1rem, 1.55vw, 1.14rem);
-  max-width: 60ch;
-  margin-bottom: 24px;
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.btns {
+.hero-desc {
+  color: var(--text-mid);
+  font-size: 1.05rem;
+  max-width: 54ch;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.hero-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-.cta {
+/* ── Buttons ── */
+.btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 12px 18px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
+  gap: 7px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
+  font-weight: 600;
   border: 1px solid transparent;
-  transition: transform 0.22s ease, background 0.22s ease;
+  cursor: pointer;
+  transition: transform .2s, background .2s, border-color .2s, box-shadow .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: var(--green);
+  color: #03200f;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 24px rgba(34,208,122,.3);
 }
 
-.cta.primary {
-  background: linear-gradient(90deg, var(--accent), #2dd4bf);
-  color: #03261a;
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border-hi);
+  color: var(--text-mid);
 }
+.btn-ghost:hover { border-color: var(--green); color: var(--text); }
 
-.cta.secondary {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: var(--line);
-  color: var(--text);
-}
-
-.cta:hover {
-  transform: translateY(-2px);
-}
-
-/* ── Scroll animations ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
-
+/* ── Hero Side Panel ── */
 .hero-panel {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: var(--shadow);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kpi-row {
   display: grid;
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .kpi {
-  padding: 13px;
-  border-radius: 12px;
-  background: var(--surface);
-  border: 1px solid #1f2d4a;
+  background: var(--surface-hi);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
 }
 
-.kpi strong {
-  display: block;
-  font-size: 18px;
-  margin-bottom: 4px;
+.kpi-value {
+  font-family: Sora, sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+  margin-bottom: 5px;
 }
 
-.kpi span {
-  color: var(--text-soft);
-  font-size: 13px;
+.kpi-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
 }
 
-.section {
-  padding: 50px 0;
+.kpi-wide {
+  background: var(--surface-hi);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
 }
 
-.section h2 {
-  font-size: clamp(1.5rem, 2.8vw, 2.16rem);
+.kpi-wide-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-mid);
   margin-bottom: 10px;
 }
 
-.lead {
-  color: var(--text-soft);
-  max-width: 80ch;
+.hero-panel-title {
+  font-family: Sora, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-.cards,
-.project-grid,
-.list-grid {
-  margin-top: 22px;
+.hero-panel-text {
+  color: var(--text-mid);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.hero-skill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.hero-skill-card {
+  background: var(--surface-hi);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  min-height: 98px;
+}
+
+.hero-skill-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.hero-skill-copy {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.45;
+}
+
+.mini-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mini-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(56,189,248,.08);
+  color: var(--blue);
+  border: 1px solid rgba(56,189,248,.15);
+}
+
+/* ── Section ── */
+.section {
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: Sora, sans-serif;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+
+.section-lead {
+  color: var(--text-mid);
+  font-size: 1rem;
+  max-width: 64ch;
+  line-height: 1.7;
+}
+
+/* ── About ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+.about-text {
+  color: var(--text-mid);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.about-text p + p { margin-top: 16px; }
+
+.about-text strong { color: var(--text); font-weight: 600; }
+
+.highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.highlight-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: border-color .2s;
+}
+
+.highlight-item:hover { border-color: var(--border-hi); }
+
+.highlight-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+.highlight-text {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.highlight-text strong { color: var(--text); }
+
+/* ── Projects ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(34,208,122,.03) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.project-card:hover::before { opacity: 1; }
+.project-card:hover {
+  border-color: rgba(34,208,122,.25);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0,0,0,.3);
+}
+
+.project-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+}
+
+.project-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.icon-erp   { background: rgba(34,208,122,.1); }
+.icon-pay   { background: rgba(56,189,248,.1); }
+.icon-saas  { background: rgba(167,139,250,.1); }
+.icon-fin   { background: rgba(251,191,36,.1); }
+
+.project-name {
+  font-family: Sora, sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.project-repo {
+  font-size: 12px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+}
+.project-repo:hover { color: var(--green); border-color: rgba(34,208,122,.3); }
+
+.project-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  min-height: 70px;
+}
+
+.project-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-bullet {
+  font-size: 13px;
+  color: var(--text-dim);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+.project-bullet::before {
+  content: '›';
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.tech-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--surface-hi);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+/* Featured project (full width) */
+.project-card.featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.project-card.featured .project-content { display: contents; }
+
+.featured-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.featured-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.featured-modules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.module-chip {
+  font-size: 12px;
+  color: var(--text-mid);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-hi);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.module-chip .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.project-card.wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.project-card.wide .project-header,
+.project-card.wide .project-desc,
+.project-card.wide .project-bullets,
+.project-card.wide .project-tech {
+  grid-column: 1 / -1;
+}
+
+.project-card.wide .project-desc {
+  max-width: 76ch;
+  min-height: 0;
+}
+
+.project-card.wide .project-bullets {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+}
+
+.project-card.wide .project-tech {
+  margin-top: 2px;
+}
+
+/* ── Skills / Competências ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  margin-top: 36px;
 }
 
-.card,
-.project,
-.list-box {
-  background: linear-gradient(140deg, var(--surface), var(--surface-strong));
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  transition: border-color 0.22s ease, transform 0.22s ease;
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color .2s;
+  min-height: 190px;
+}
+.skill-card:hover { border-color: var(--border-hi); }
+
+.skill-icon {
+  font-size: 22px;
+  margin-bottom: 12px;
 }
 
-.card:hover,
-.project:hover {
-  border-color: rgba(52, 211, 153, 0.3);
-  transform: translateY(-3px);
-}
-
-.card h3,
-.project h3,
-.list-box h3 {
-  font-size: 1.08rem;
+.skill-title {
+  font-family: Sora, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
-.card p,
-.project p,
-.list-box p,
-.project ul {
-  color: var(--text-soft);
-  font-size: 0.94rem;
+.skill-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.6;
 }
 
-.project {
+/* ── Stack ── */
+.stack-section {
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+}
+
+.stack-grid {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 36px;
 }
 
-.project ul {
-  margin-left: 18px;
+.stack-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
 }
 
-.tech {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: #9ec8f7;
+.stack-group-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-.project-links {
+.stack-items {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
-.stack-list {
+.stack-item {
+  font-size: 13px;
+  color: var(--text-mid);
   display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stack-item::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+/* ── Method ── */
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.method-step {
+  padding: 24px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.method-step:last-child { border-right: none; }
+
+.method-num {
+  font-family: Sora, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--border-hi);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.method-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.method-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ── Contact ── */
+.contact-section {
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+}
+
+.contact-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-box::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(34,208,122,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.contact-box h2 {
+  font-family: Sora, sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: 12px;
+}
+
+.contact-box p {
+  color: var(--text-mid);
+  max-width: 52ch;
+  margin-inline: auto;
+  margin-bottom: 32px;
+  font-size: 1rem;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
 }
 
-.badge {
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-family: "JetBrains Mono", monospace;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid #2c4b70;
-  color: #b5d9fb;
+.contact-links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 24px;
 }
 
-.contact {
-  text-align: center;
-  padding: 66px 0 50px;
+.contact-link {
+  font-size: 13px;
+  color: var(--text-dim);
+  transition: color .2s;
 }
+.contact-link:hover { color: var(--text); }
 
-.contact p {
-  color: var(--text-soft);
-  margin: 8px auto 22px;
-  max-width: 58ch;
-}
-
+/* ── Footer ── */
 footer {
-  padding: 22px 0 34px;
-  text-align: center;
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.footer-mono {
   font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: #6f80a6;
+  font-size: 11px;
+  color: var(--text-dim);
 }
 
-@media (max-width: 940px) {
-  .hero-grid,
-  .cards,
-  .project-grid,
-  .list-grid {
-    grid-template-columns: 1fr;
-  }
+/* ── Reveal animation ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: .07s; }
+.delay-2 { transition-delay: .14s; }
+.delay-3 { transition-delay: .21s; }
+.delay-4 { transition-delay: .28s; }
 
-  .topbar {
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero-grid      { grid-template-columns: 1fr; }
+  .hero-panel     { display: none; }
+  .about-grid     { grid-template-columns: 1fr; }
+  .projects-grid  { grid-template-columns: 1fr; }
+  .project-card.featured { grid-column: auto; display: flex; flex-direction: column; }
+  .project-card.wide { grid-column: auto; display: flex; flex-direction: column; }
+  .project-card.wide .project-bullets { grid-template-columns: 1fr; }
+  .skills-grid    { grid-template-columns: 1fr; }
+  .stack-grid     { grid-template-columns: 1fr 1fr; }
+  .method-grid    { grid-template-columns: 1fr 1fr; }
+  .method-step    { border-right: none; border-bottom: 1px solid var(--border); }
+  .method-step:nth-child(2n) { border-right: none; }
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 48px 0 52px; }
+  .nav-links { display: none; }
+  .stack-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr; }
+  .contact-box { padding: 32px 20px; }
+  .hero-actions { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+  .btn, .project-card, .nav-links a { transition: none; }
+}
+
+.skill-card,
+.project-card {
+    height: 100%;
+}
+
+.projects-grid,
+.skills-grid {
+    align-items: stretch;
+}
+
+.skill-card {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
-@media (max-width: 560px) {
-  .cta { width: 100%; }
-  .btns { width: 100%; }
-}
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="container">
-    <div class="topbar">
-      <div class="brand">diego.garcia/backend</div>
-      <nav class="nav" aria-label="Navegacao principal">
-        <a href="#sobre">Sobre</a>
-        <a href="#projetos">Projetos</a>
-        <a href="#competencias">Competencias</a>
-        <a href="#stack">Stack</a>
-      </nav>
-      <div class="status">Disponivel para oportunidades Jr</div>
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="wrap navbar-inner">
+    <div class="logo">dg<span>.</span>dev</div>
+    <div class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#competencias">Competências</a>
+      <a href="#stack">Stack</a>
+      <a href="#contato">Contato</a>
     </div>
+    <div class="badge-open">Disponível para oportunidades</div>
+  </div>
+</nav>
 
+<!-- ── Hero ── -->
+<header class="hero">
+  <div class="wrap">
     <div class="hero-grid">
+
       <div>
-        <span class="eyebrow">BACKEND DEVELOPER</span>
-        <h1>Backend orientado a produto, com foco em ERP, pagamentos e SaaS.</h1>
-        <p>
-          Sou Diego Garcia e desenvolvo sistemas web que resolvem operações reais de negócio.
-          Meu foco está em Laravel, arquitetura modular, APIs REST e integrações críticas.
-          Nos projetos mais recentes, trabalhei com ERP multi-módulo, fallback de gateways de pagamento,
-          multi-tenancy, trilhas de auditoria e automações de fluxo.
+        <div class="hero-eyebrow reveal">Back-end Developer</div>
+        <h1 class="reveal delay-1">
+          Desenvolvendo sistemas<br>que resolvem <em>problemas reais.</em>
+        </h1>
+        <p class="hero-desc reveal delay-2">
+          Desenvolvedor back-end com foco em PHP/Laravel, APIs REST, integrações de sistemas e bancos de dados relacionais. Construo soluções para operações reais com atenção a arquitetura, segurança, manutenção e evolução técnica.
         </p>
-        <div class="btns">
-          <a class="cta primary" href="https://github.com/DiegoGS1002" target="_blank" rel="noopener noreferrer">Ver GitHub</a>
-          <a class="cta secondary" href="https://www.linkedin.com/in/diego-garcia-bb75b7288" target="_blank" rel="noopener noreferrer">Conectar no LinkedIn</a>
+        <div class="hero-actions reveal delay-3">
+          <a class="btn btn-primary" href="https://github.com/DiegoGS1002" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            Ver GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/diego-garcia-bb75b7288/" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a class="btn btn-ghost" href="mailto:diegoaugusto.garciaa@gmail.com">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            E-mail
+          </a>
         </div>
       </div>
 
-      <aside class="hero-panel" aria-label="Resumo profissional">
-        <div class="kpi">
-          <strong>4 projetos documentados</strong>
-          <span>Nexora, Agostini ERP, BeTalentech Payment API e Subly.</span>
+      <!-- Side panel -->
+      <aside class="hero-panel reveal delay-2" aria-label="Resumo">
+        <div>
+          <div class="hero-panel-title">Skills aplicadas em produtos reais</div>
+          <p class="hero-panel-text">
+            Experiência prática unindo backend Laravel, regras de negócio, integrações externas e suporte a sistemas corporativos.
+          </p>
         </div>
-        <div class="kpi">
-          <strong>Arquitetura orientada a domínio</strong>
-          <span>Service layer, componentes reativos, modularizacao e padroes consistentes.</span>
+        <div class="hero-skill-grid">
+          <div class="hero-skill-card">
+            <div class="hero-skill-label">Backend</div>
+            <div class="hero-skill-copy">APIs REST, service layer, autenticação, filas e organização por domínio.</div>
+          </div>
+          <div class="hero-skill-card">
+            <div class="hero-skill-label">Dados</div>
+            <div class="hero-skill-copy">Modelagem relacional, consultas, diagnóstico e performance em MySQL/PostgreSQL.</div>
+          </div>
+          <div class="hero-skill-card">
+            <div class="hero-skill-label">Integrações</div>
+            <div class="hero-skill-copy">Gateways, Stripe, webhooks, Google Maps API e sistemas corporativos.</div>
+          </div>
+          <div class="hero-skill-card">
+            <div class="hero-skill-label">Produto</div>
+            <div class="hero-skill-copy">ERPs, SaaS, força de vendas, RBAC, multi-tenancy e fluxos operacionais.</div>
+          </div>
         </div>
-        <div class="kpi">
-          <strong>Integrações sensíveis</strong>
-          <span>Gateways de pagamento, Stripe, Google Maps, webhooks e fluxos de fallback.</span>
+        <div class="kpi-wide">
+          <div class="kpi-wide-title">Stack principal</div>
+          <div class="mini-stack">
+            <span class="mini-tag">Laravel 12+</span>
+            <span class="mini-tag">PHP 8+</span>
+            <span class="mini-tag">Livewire</span>
+            <span class="mini-tag">Filament</span>
+            <span class="mini-tag">Sanctum</span>
+            <span class="mini-tag">Stripe</span>
+            <span class="mini-tag">Docker</span>
+            <span class="mini-tag">Pest</span>
+            <span class="mini-tag">Redis</span>
+          </div>
         </div>
-        <div class="kpi">
-          <strong>Qualidade e governança</strong>
-          <span>RBAC, auditoria, testes com Pest/PHPUnit e preocupação com manutenção.</span>
+        <div class="kpi-wide">
+          <div class="kpi-wide-title">Em evolução</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="font-size:13px; color:var(--text-mid); display:flex; gap:8px; align-items:center;">
+              <span style="color:var(--green);">✓</span> Automação com IA aplicada a sistemas
+            </div>
+            <div style="font-size:13px; color:var(--text-mid); display:flex; gap:8px; align-items:center;">
+              <span style="color:var(--green);">✓</span> Agentic RAG e Tool Calling
+            </div>
+            <div style="font-size:13px; color:var(--text-mid); display:flex; gap:8px; align-items:center;">
+              <span style="color:var(--green);">✓</span> Testes automatizados e observabilidade
+            </div>
+            <div style="font-size:13px; color:var(--text-mid); display:flex; gap:8px; align-items:center;">
+              <span style="color:var(--green);">✓</span> Arquitetura para produtos SaaS
+            </div>
+          </div>
         </div>
       </aside>
+
     </div>
   </div>
 </header>
 
-<main class="container">
-  <section class="section" id="sobre">
-    <h2 class="reveal">Proposta de valor</h2>
-    <p class="lead reveal reveal-delay-1">
-      Construo e evoluo produtos backend que precisam funcionar sob pressão: ERP com regras de negócio amplas,
-      APIs de pagamento com resiliência e SaaS com cobrança recorrente. Priorizo clareza de código, organização da
-      arquitetura e previsibilidade de entrega para facilitar manutenção e evolução contínua.
+<main>
+
+<!-- ── Sobre ── -->
+<section class="section" id="sobre">
+  <div class="wrap">
+    <div class="section-label reveal">Sobre</div>
+    <h2 class="section-title reveal delay-1">Sobre mim</h2>
+    <p class="section-lead reveal delay-2">
+      Desenvolvedor back-end em formação contínua, com vivência em produto, suporte técnico e sistemas corporativos.
     </p>
-  </section>
 
-  <section class="section" id="projetos">
-    <h2 class="reveal">Projetos em destaque</h2>
-    <p class="lead reveal reveal-delay-1">Conteúdo estruturado a partir das documentações técnicas dos projetos.</p>
-
-    <div class="project-grid">
-      <article class="project reveal reveal-delay-1">
-        <h3>Nexora EMS ERP</h3>
+    <div class="about-grid">
+      <div class="about-text reveal delay-1">
         <p>
-          ERP modular em Laravel 12 com ampla cobertura de domínios: cadastros, financeiro, vendas, compras,
-          fiscal, logística, RH e produção, com componentes Livewire full-page e painel Filament.
+          Sou Diego Garcia, desenvolvedor back-end com foco no ecossistema <strong>PHP/Laravel</strong>.
+          Tenho experiência prática no desenvolvimento de APIs REST, integrações de sistemas e bancos de dados relacionais.
+          Minha trajetória começou como estagiário de desenvolvimento na Agostini Tecnologia, participando da construção de
+          um ERP multi-tenant com módulos de Produção, Vendas, Financeiro, Ponto Eletrônico e Logística.
         </p>
-        <ul>
-          <li>Módulos operacionais com fluxos reais (pedido, faturamento, entrega e folha).</li>
-          <li>KPI dashboard, logs de auditoria, notificações e configurações centralizadas.</li>
-          <li>Service layer para vendas, precificação, ponto e processos financeiros.</li>
-        </ul>
-        <div class="tech">Laravel 12 | Livewire 3 | Filament 4.5 | MySQL | Tailwind | Bootstrap</div>
-        <div class="project-links">
-          <a class="cta secondary" href="https://github.com/DiegoGS1002/nexora-ems-erp" target="_blank" rel="noopener noreferrer">Repositório</a>
-        </div>
-      </article>
-
-      <article class="project reveal reveal-delay-2">
-        <h3>Agostini ERP</h3>
         <p>
-          ERP multi-tenant para produção, vendas, financeiro, ponto eletrônico e logística, com controle de acesso
-          por papéis e trilhas de operação para usuários de backoffice e campo.
+          Atualmente atuo como Analista de Suporte Computacional na Data C, trabalhando no diagnóstico de sistemas
+          corporativos e bancos de dados. Em paralelo, desenvolvo projetos próprios para evoluir tecnicamente em ERP modular,
+          SaaS de assinaturas, APIs de pagamento e automação aplicada com Inteligência Artificial.
         </p>
-        <ul>
-          <li>Isolamento por empresa com tenant scope e modelos com UUID.</li>
-          <li>Fluxos de produção e entrega com QR Code, pausas e progresso em tempo real.</li>
-          <li>Recursos de mapa, exportação Excel, PDF e permissão granular via FilamentShield.</li>
-        </ul>
-        <div class="tech">Laravel 12 | Filament 3 | Livewire 3 | MySQL | Docker | PWA</div>
-        <div class="project-links">
-          <a class="cta secondary" href="https://github.com/DiegoGS1002/agostini_erp" target="_blank" rel="noopener noreferrer">Repositório</a>
-        </div>
-      </article>
-
-      <article class="project reveal reveal-delay-3">
-        <h3>BeTalentech Payment API</h3>
         <p>
-          API REST de pagamentos com múltiplos gateways, fallback automático, autenticação por token e
-          separação clara entre controller, services e contratos de gateway.
+          Curso Análise e Desenvolvimento de Sistemas e busco oportunidades como <strong>Desenvolvedor Back-end Jr/Pleno</strong>,
+          contribuindo em ambientes colaborativos onde código, produto e aprendizado caminham juntos.
         </p>
-        <ul>
-          <li>Fallback entre gateways por prioridade dinâmica e estado ativo.</li>
-          <li>Gestão de usuários, produtos, clientes e transações com regras por role.</li>
-          <li>Seeds padrão, ambiente Docker e cobertura de testes com Pest.</li>
-        </ul>
-        <div class="tech">Laravel 12 | Sanctum | Pest | MySQL | Docker | REST API</div>
-        <div class="project-links">
-          <a class="cta secondary" href="https://github.com/DiegoGS1002/betalentech-payment-api" target="_blank" rel="noopener noreferrer">Repositório</a>
+      </div>
+
+      <div class="highlight-list">
+        <div class="highlight-item reveal delay-1">
+          <div class="highlight-dot"></div>
+          <div class="highlight-text"><strong>Backend Laravel</strong> — APIs REST, regras de negócio, autenticação, RBAC e organização por camadas.</div>
         </div>
-      </article>
-
-      <article class="project reveal reveal-delay-4">
-        <h3>Subly</h3>
-        <p>
-          SaaS para gerenciamento de assinaturas recorrentes com Stripe, autenticação com 2FA,
-          suporte a webhooks e stack moderna para operação de billing.
-        </p>
-        <ul>
-          <li>Arquitetura com Laravel Cashier, Fortify e Livewire 4.</li>
-          <li>Fluxo de assinaturas, faturas e eventos de pagamento em tempo real.</li>
-          <li>Preparado para deploy com Docker e rotinas de testes automatizados.</li>
-        </ul>
-        <div class="tech">Laravel 13 | Livewire 4 | Cashier | Stripe | MySQL | Docker</div>
-        <div class="project-links">
-          <a class="cta secondary" href="https://github.com/DiegoGS1002/subly" target="_blank" rel="noopener noreferrer">Repositório</a>
+        <div class="highlight-item reveal delay-2">
+          <div class="highlight-dot"></div>
+          <div class="highlight-text"><strong>Sistemas corporativos</strong> — ERP multi-tenant, módulos operacionais, suporte, diagnóstico e visão de processos.</div>
         </div>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="competencias">
-    <h2 class="reveal">Competências principais</h2>
-    <div class="cards">
-      <article class="card reveal reveal-delay-1">
-        <h3>Arquitetura backend</h3>
-        <p>Modelagem orientada a domínio, service layer, componentes desacoplados e organização para evolução incremental.</p>
-      </article>
-      <article class="card reveal reveal-delay-2">
-        <h3>Produtos de negócio</h3>
-        <p>Experiência em fluxos de ERP (financeiro, compras, vendas, fiscal, RH e logística) com regras operacionais reais.</p>
-      </article>
-      <article class="card reveal reveal-delay-3">
-        <h3>Pagamentos e assinatura</h3>
-        <p>Implementação de APIs com fallback de gateway, processamento transacional e billing recorrente com Stripe.</p>
-      </article>
-      <article class="card reveal reveal-delay-4">
-        <h3>Segurança e governança</h3>
-        <p>RBAC, auditoria, autenticação por token/sessão, isolamento por tenant e trilhas de mudança para rastreabilidade.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="stack">
-    <h2>Stack consolidada</h2>
-    <div class="stack-list" aria-label="Tecnologias">
-      <span class="badge">PHP 8.2+</span>
-      <span class="badge">Laravel 12+</span>
-      <span class="badge">Livewire 3+</span>
-      <span class="badge">Filament 3+</span>
-      <span class="badge">Laravel Sanctum</span>
-      <span class="badge">Laravel Cashier</span>
-      <span class="badge">Stripe</span>
-      <span class="badge">MySQL</span>
-      <span class="badge">Docker</span>
-      <span class="badge">Tailwind CSS</span>
-      <span class="badge">Pest / PHPUnit</span>
-      <span class="badge">REST APIs</span>
-    </div>
-  </section>
-
-  <section class="section" id="metodo">
-    <h2>Como eu trabalho</h2>
-    <div class="list-grid">
-      <article class="list-box">
-        <h3>1. Entendimento de domínio</h3>
-        <p>Traduzo regra de negócio em entidades, fluxos e estados para evitar retrabalho técnico.</p>
-      </article>
-      <article class="list-box">
-        <h3>2. Estrutura de arquitetura</h3>
-        <p>Defino responsabilidades por camada (controller, service, model, componente) e padronizo contratos.</p>
-      </article>
-      <article class="list-box">
-        <h3>3. Implementação incremental</h3>
-        <p>Entrego módulo por módulo com validações, logs e observabilidade de fluxo.</p>
-      </article>
-      <article class="list-box">
-        <h3>4. Refino para escala</h3>
-        <p>Reviso performance, segurança, cobertura de testes e manutenção para crescimento sustentável.</p>
-      </article>
-    </div>
-  </section>
-</main>
-
-<section class="contact" id="contato">
-  <div class="container">
-    <h2>Vamos construir algo sólido?</h2>
-    <p>
-      Aberto a oportunidades como Desenvolvedor Backend Jr para atuar em sistemas web,
-      ERPs, APIs de pagamento e produtos SaaS.
-    </p>
-    <div class="btns" style="justify-content: center;">
-      <a class="cta primary" href="mailto:diegoaugusto.garciaa@gmail.com">Entrar em contato</a>
-      <a class="cta secondary" href="https://wa.me/5532984502345" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <div class="highlight-item reveal delay-3">
+          <div class="highlight-dot"></div>
+          <div class="highlight-text"><strong>Integrações e dados</strong> — gateways de pagamento, Stripe, webhooks, MySQL, PostgreSQL e Redis.</div>
+        </div>
+        <div class="highlight-item reveal delay-4">
+          <div class="highlight-dot"></div>
+          <div class="highlight-text"><strong>Qualidade técnica</strong> — Docker, Git, testes automatizados com Pest e documentação clara para manutenção.</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ── Projetos ── -->
+<section class="section" id="projetos">
+  <div class="wrap">
+    <div class="section-label reveal">Projetos</div>
+    <h2 class="section-title reveal delay-1">Em destaque</h2>
+    <p class="section-lead reveal delay-2">Sistemas construídos com documentação técnica completa, stack moderna e fluxos de negócio reais.</p>
+
+    <div class="projects-grid">
+
+      <!-- Nexora — featured -->
+      <article class="project-card featured reveal delay-1">
+        <div class="featured-left">
+          <div class="project-header">
+            <div class="project-icon icon-erp">🏗️</div>
+            <div>
+              <div class="project-name">Nexora EMS ERP</div>
+              <div style="font-size:12px; color:var(--text-dim); margin-top:3px;">Enterprise Intelligence Platform</div>
+            </div>
+            <a class="project-repo" href="https://github.com/DiegoGS1002/nexora-ems-erp" target="_blank" rel="noopener">↗ Repositório</a>
+          </div>
+          <p class="project-desc">
+            ERP modular em Laravel 12 projetado para operações empresariais completas — do financeiro ao e-commerce, com IA embarcada, força de vendas integrada e painel Filament.
+          </p>
+          <div class="project-bullets">
+            <div class="project-bullet">Arquitetura modular com 9 domínios operacionais independentes</div>
+            <div class="project-bullet">IA contextual com RAG e insights preditivos embarcados nativamente</div>
+            <div class="project-bullet">Force de Vendas com CRM, roteirização e catálogo digital em tempo real</div>
+            <div class="project-bullet">E-commerce integrado ao ERP com estoque e pedidos sincronizados</div>
+          </div>
+          <div class="project-tech">
+            <span class="tech-tag">Laravel 12</span>
+            <span class="tech-tag">Livewire 3</span>
+            <span class="tech-tag">Filament 4.5</span>
+            <span class="tech-tag">Tailwind v4</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Vite</span>
+          </div>
+        </div>
+        <div class="featured-right">
+          <div class="kpi-wide-title" style="font-size:12px; color:var(--text-dim); font-weight:600; letter-spacing:.4px; text-transform:uppercase;">Módulos implementados</div>
+          <div class="featured-modules">
+            <div class="module-chip"><span class="dot"></span>Financeiro</div>
+            <div class="module-chip"><span class="dot"></span>Fiscal / NF-e</div>
+            <div class="module-chip"><span class="dot"></span>Compras</div>
+            <div class="module-chip"><span class="dot"></span>Estoque / WMS</div>
+            <div class="module-chip"><span class="dot"></span>Produção / BOM</div>
+            <div class="module-chip"><span class="dot"></span>RH / Folha</div>
+            <div class="module-chip"><span class="dot"></span>Logística</div>
+            <div class="module-chip"><span class="dot"></span>Vendas / CRM</div>
+            <div class="module-chip"><span class="dot"></span>E-commerce</div>
+            <div class="module-chip"><span class="dot"></span>IA Suporte</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Agostini ERP -->
+      <article class="project-card reveal delay-2">
+        <div class="project-header">
+          <div class="project-icon icon-erp">🏭</div>
+          <div class="project-name">Agostini ERP</div>
+          <a class="project-repo" href="https://github.com/DiegoGS1002/agostini_erp" target="_blank" rel="noopener">↗ Repositório</a>
+        </div>
+        <p class="project-desc">
+          ERP multi-tenant para produção, vendas e logística com controle de acesso por papéis, QR Code em chão de fábrica e trilhas de operação para campo.
+        </p>
+        <div class="project-bullets">
+          <div class="project-bullet">Multi-tenancy com TenantScope e UUIDs — isolamento total entre empresas</div>
+          <div class="project-bullet">Controle de ordens de produção em tempo real via QR Code e Livewire</div>
+          <div class="project-bullet">Google Maps integrado, exportação Excel/PDF e RBAC com FilamentShield</div>
+          <div class="project-bullet">PWA para operadores de campo e motoristas com interface otimizada</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Laravel 12</span>
+          <span class="tech-tag">Filament 3</span>
+          <span class="tech-tag">Livewire 3</span>
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">PWA</span>
+        </div>
+      </article>
+
+      <!-- BeTalentech -->
+      <article class="project-card reveal delay-3">
+        <div class="project-header">
+          <div class="project-icon icon-pay">💳</div>
+          <div class="project-name">BeTalentech Payment API</div>
+          <a class="project-repo" href="https://github.com/DiegoGS1002/betalentech-payment-api" target="_blank" rel="noopener">↗ Repositório</a>
+        </div>
+        <p class="project-desc">
+          API REST de pagamentos com múltiplos gateways, fallback automático por prioridade dinâmica e separação clara entre controller, services e contratos de gateway.
+        </p>
+        <div class="project-bullets">
+          <div class="project-bullet">Fallback entre gateways com prioridade configurável e estado ativo</div>
+          <div class="project-bullet">Autenticação por token (Sanctum) com regras de acesso por role</div>
+          <div class="project-bullet">Cobertura de testes com Pest, seeds padrão e ambiente Docker completo</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Laravel 12</span>
+          <span class="tech-tag">Sanctum</span>
+          <span class="tech-tag">Pest</span>
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">REST API</span>
+        </div>
+      </article>
+
+      <!-- Subly -->
+      <article class="project-card wide reveal delay-4">
+        <div class="project-header">
+          <div class="project-icon icon-saas">🔁</div>
+          <div class="project-name">Subly</div>
+          <a class="project-repo" href="https://github.com/DiegoGS1002/subly" target="_blank" rel="noopener">↗ Repositório</a>
+        </div>
+        <p class="project-desc">
+          SaaS para gerenciamento de assinaturas recorrentes com Stripe, autenticação com 2FA e stack moderna para operação de billing.
+        </p>
+        <div class="project-bullets">
+          <div class="project-bullet">Laravel Cashier + Stripe: assinaturas, faturas e eventos em tempo real</div>
+          <div class="project-bullet">Fortify + 2FA para autenticação segura, Livewire 4 reativo</div>
+          <div class="project-bullet">Deploy com Docker e rotinas de testes automatizados com Pest</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Laravel 13</span>
+          <span class="tech-tag">Livewire 4</span>
+          <span class="tech-tag">Cashier</span>
+          <span class="tech-tag">Stripe</span>
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">Docker</span>
+        </div>
+      </article>
+
+      <!-- MF My Financial -->
+      <article class="project-card wide reveal delay-2">
+        <div class="project-header">
+          <div class="project-icon icon-fin">📊</div>
+          <div class="project-name">MF My Financial</div>
+          <a class="project-repo" href="https://github.com/DiegoGS1002" target="_blank" rel="noopener">↗ Repositório</a>
+        </div>
+        <p class="project-desc">
+          Sistema de gestão financeira pessoal com plano de contas hierárquico (71 contas pré-cadastradas), lançamentos, relatórios com Chart.js e design system próprio com prefixo <code style="font-family:JetBrains Mono,monospace; font-size:12px; color:var(--blue);">nx-*</code>.
+        </p>
+        <div class="project-bullets">
+          <div class="project-bullet">Plano de contas em árvore hierárquica com filtros por tipo</div>
+          <div class="project-bullet">Gráficos interativos: receita vs despesa, top categorias, métodos de pagamento</div>
+          <div class="project-bullet">KPIs em tempo real com filtros de período personalizáveis</div>
+          <div class="project-bullet">Componentes Livewire com paginação e busca em tempo real</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Laravel 13</span>
+          <span class="tech-tag">Livewire 4</span>
+          <span class="tech-tag">Alpine.js</span>
+          <span class="tech-tag">Chart.js 4</span>
+          <span class="tech-tag">Tailwind v4</span>
+          <span class="tech-tag">MySQL</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Competências ── -->
+<section class="section" id="competencias">
+  <div class="wrap">
+    <div class="section-label reveal">Competências</div>
+    <h2 class="section-title reveal delay-1">Skills em foco</h2>
+    <p class="section-lead reveal delay-2">Competências que conectam desenvolvimento back-end, sustentação de sistemas e evolução de produtos digitais.</p>
+
+    <div class="skills-grid">
+      <article class="skill-card reveal delay-1">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-title">Back-end PHP/Laravel</div>
+        <p class="skill-desc">Desenvolvimento de APIs REST, regras de negócio, autenticação, autorização e serviços internos usando Laravel, PHP 8+ e boas práticas de organização.</p>
+      </article>
+      <article class="skill-card reveal delay-2">
+        <div class="skill-icon">🧩</div>
+        <div class="skill-title">ERPs e sistemas corporativos</div>
+        <p class="skill-desc">Vivência com módulos de Produção, Vendas, Financeiro, Ponto Eletrônico e Logística, incluindo arquitetura multi-tenant e controle de acesso por papéis.</p>
+      </article>
+      <article class="skill-card reveal delay-3">
+        <div class="skill-icon">🔌</div>
+        <div class="skill-title">Integrações e APIs</div>
+        <p class="skill-desc">Construção de integrações externas com webhooks, gateways de pagamento, Stripe, autenticação JWT/Sanctum e comunicação clara entre sistemas.</p>
+      </article>
+      <article class="skill-card reveal delay-4">
+        <div class="skill-icon">🗄️</div>
+        <div class="skill-title">Bancos de dados e diagnóstico</div>
+        <p class="skill-desc">Modelagem e consulta em MySQL e PostgreSQL, análise de inconsistências, suporte a sistemas corporativos e leitura técnica para correção de problemas.</p>
+      </article>
+      <article class="skill-card reveal delay-2">
+        <div class="skill-icon">✅</div>
+        <div class="skill-title">Qualidade e ambiente</div>
+        <p class="skill-desc">Uso de Docker, Git, Redis e testes automatizados com Pest para criar ambientes reproduzíveis, reduzir regressões e facilitar manutenção.</p>
+      </article>
+      <article class="skill-card reveal delay-3">
+        <div class="skill-icon">🤖</div>
+        <div class="skill-title">IA aplicada a automação</div>
+        <p class="skill-desc">Estudo e aplicação de Agentic RAG, Tool Calling e automações inteligentes em projetos próprios voltados a ERP, força de vendas e produtividade.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stack ── -->
+<section class="stack-section" id="stack">
+  <div class="wrap">
+    <div class="section-label reveal">Stack</div>
+    <h2 class="section-title reveal delay-1">Ferramentas consolidadas</h2>
+    <p class="section-lead reveal delay-2">Tecnologias com as quais tenho experiência prática em projetos reais.</p>
+
+    <div class="stack-grid">
+      <div class="stack-group reveal delay-1">
+        <div class="stack-group-label">Backend</div>
+        <div class="stack-items">
+          <div class="stack-item">PHP 8.2+</div>
+          <div class="stack-item">Laravel 12+</div>
+          <div class="stack-item">Livewire 3 / 4</div>
+          <div class="stack-item">Filament 3 / 4</div>
+          <div class="stack-item">Alpine.js</div>
+        </div>
+      </div>
+      <div class="stack-group reveal delay-2">
+        <div class="stack-group-label">APIs & Auth</div>
+        <div class="stack-items">
+          <div class="stack-item">Laravel Sanctum</div>
+          <div class="stack-item">Laravel Cashier</div>
+          <div class="stack-item">Laravel Fortify</div>
+          <div class="stack-item">REST APIs</div>
+          <div class="stack-item">Webhooks</div>
+        </div>
+      </div>
+      <div class="stack-group reveal delay-3">
+        <div class="stack-group-label">Dados & Infra</div>
+        <div class="stack-items">
+          <div class="stack-item">MySQL 8.0</div>
+          <div class="stack-item">PostgreSQL</div>
+          <div class="stack-item">Redis</div>
+          <div class="stack-item">Docker / Sail</div>
+          <div class="stack-item">Git / GitHub</div>
+        </div>
+      </div>
+      <div class="stack-group reveal delay-4">
+        <div class="stack-group-label">Qualidade</div>
+        <div class="stack-items">
+          <div class="stack-item">Pest / PHPUnit</div>
+          <div class="stack-item">Spatie Permission</div>
+          <div class="stack-item">Stripe SDK</div>
+          <div class="stack-item">Chart.js</div>
+          <div class="stack-item">Google Maps API</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Método ── -->
+<section class="section" id="metodo">
+  <div class="wrap">
+    <div class="section-label reveal">Processo</div>
+    <h2 class="section-title reveal delay-1">Como eu trabalho</h2>
+
+    <div class="method-grid reveal delay-2">
+      <div class="method-step">
+        <div class="method-num">01</div>
+        <div class="method-title">Entendimento de domínio</div>
+        <p class="method-desc">Mapeio entidades, estados e fluxos do negócio antes de qualquer linha de código para evitar retrabalho técnico.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-num">02</div>
+        <div class="method-title">Estrutura de arquitetura</div>
+        <p class="method-desc">Defino responsabilidades por camada — controller, service, model, componente — e padronizo contratos desde o início.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-num">03</div>
+        <div class="method-title">Implementação incremental</div>
+        <p class="method-desc">Entrego módulo por módulo com validações, logs e observabilidade de fluxo. Nada vai para produção sem rastreabilidade.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-num">04</div>
+        <div class="method-title">Refino para escala</div>
+        <p class="method-desc">Reviso performance, segurança e cobertura de testes. O objetivo é código que aguenta crescimento sem acumular dívida técnica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contato ── -->
+<section class="contact-section" id="contato">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <h2>Vamos construir algo sólido?</h2>
+      <p>Aberto a oportunidades como Desenvolvedor Back-end Jr/Pleno em sistemas web, ERPs, APIs e produtos SaaS. Pode me chamar pelo canal que preferir.</p>
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="mailto:diegoaugusto.garciaa@gmail.com">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Enviar e-mail
+        </a>
+        <a class="btn btn-ghost" href="https://wa.me/5532984502345" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/DiegoGS1002" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:diegoaugusto.garciaa@gmail.com">diegoaugusto.garciaa@gmail.com</a>
+        <span style="color:var(--border-hi);">·</span>
+        <a class="contact-link" href="https://www.linkedin.com/in/diego-garcia-bb75b7288/" target="_blank" rel="noopener">linkedin.com/in/diego-garcia-bb75b7288</a>
+        <span style="color:var(--border-hi);">·</span>
+        <a class="contact-link" href="https://wa.me/5532984502345" target="_blank" rel="noopener">+55 32 98450-2345</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── Footer ── -->
 <footer>
-  <p>© 2026 Diego Garcia &nbsp;·&nbsp; <a href="mailto:diegoaugusto.garciaa@gmail.com" style="color:#9ec8f7;text-decoration:none;">diegoaugusto.garciaa@gmail.com</a></p>
+  <div class="wrap footer-inner">
+    <div class="footer-copy">© 2026 Diego Augusto Garcia de Souza</div>
+    <div class="footer-mono">dg.dev · Laravel · PHP · Livewire</div>
+  </div>
 </footer>
 
 <script>
+  // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav active state
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.style.color = 'var(--green)';
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => navObserver.observe(s));
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
